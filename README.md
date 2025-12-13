@@ -24,6 +24,10 @@ See [Vite Configuration Reference](https://vite.dev/config/).
 ```sh
 npm install
 ```
+## Dependences
+
+   npm install axios
+   npm install -D tailwindcss@3.4.17 postcss autoprefixer
 
 ### Compile and Hot-Reload for Development
 

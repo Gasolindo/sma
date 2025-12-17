@@ -57,30 +57,37 @@
 
 <script setup>
 import { ref } from 'vue'
+import { onMounted } from 'vue'
 
-const arquivo = ref(null)
+let arquivo_path = ''
 const loading = ref(false)
 const mensagem = ref('')
 const imagens = ref([])
 
 function selecionarArquivo(event) {
-  arquivo.value = event.target.files[0]
+  
+  arquivo_path = event.target.value
 }
 
 async function enviarArquivo() {
-  if (!arquivo.value) return
+  console.log(arquivo_path)
+  if (!arquivo_path) return
 
   loading.value = true
   mensagem.value = ''
   imagens.value = []
 
-  const formData = new FormData()
-  formData.append('file', arquivo.value)
-
   try {
+
     const response = await fetch('http://localhost:8080/iniciar_processamento', {
       method: 'POST',
-      body: formData
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        'input_path': "C:\\Users\\mucar\\OpenIE_grafos\\_data\\1_frases_bia_corpus.txt",
+        'output_path': "C:\\Users\\mucar\\Área de Trabalho\\teste extractionsss"
+      })
     })
 
     const data = await response.json()
@@ -94,4 +101,37 @@ async function enviarArquivo() {
     loading.value = false
   }
 }
+
+import { io } from "socket.io-client"
+const socket = io("ws://localhost:8080", {
+      transports: ["websocket"]
+    });
+
+    socket.on("connect", () => {
+      console.log('CONECTADOOO')
+      // status.textContent = "Conectado ao servidor";
+    });
+
+    socket.on("disconnect", () => {
+      // status.textContent = "Desconectado";
+    });
+
+    socket.on("resultados", (data) => {
+      console.log( data);
+
+      // if (!data || !Array.isArray(data.imagens)) {
+      //   console.warn("Formato inválido");
+      //   return;
+      // }
+
+      // // limpa imagens anteriores
+      // galeria.innerHTML = "";
+
+      // data.imagens.forEach((imgSrc) => {
+      //   const img = document.createElement("img");
+      //   img.src = imgSrc;
+      //   galeria.appendChild(img);
+      // });
+    });
+
 </script>

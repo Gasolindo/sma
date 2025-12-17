@@ -15,12 +15,42 @@
     <!-- Upload -->
     <div class="bg-black/60 p-8 rounded-3xl border border-cyan-500">
 
-      <input
+      <!-- <input
         type="file"
         accept=".txt"
         @change="selecionarArquivo"
         class="block w-full mb-6 text-white"
-      />
+      /> -->
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+
+<!-- INPUT PATH -->
+<div>
+  <label class="block text-cyan-300 font-semibold mb-2">
+    📄 Caminho do arquivo de entrada
+  </label>
+  <input
+    v-model="inputPath"
+    type="text"
+    placeholder="C:\\Users\\usuario\\arquivo.txt"
+    class="w-full px-4 py-3 rounded-xl bg-black/40 border border-cyan-400 text-white focus:outline-none focus:ring-2 focus:ring-cyan-400"
+  />
+</div>
+
+<!-- OUTPUT PATH -->
+<div>
+  <label class="block text-pink-300 font-semibold mb-2">
+    📁 Caminho da pasta de saída
+  </label>
+  <input
+    v-model="outputPath"
+    type="text"
+    placeholder="C:\\Users\\usuario\\resultado"
+    class="w-full px-4 py-3 rounded-xl bg-black/40 border border-pink-400 text-white focus:outline-none focus:ring-2 focus:ring-pink-400"
+  />
+</div>
+
+</div>
 
       <button
         @click="enviarArquivo"

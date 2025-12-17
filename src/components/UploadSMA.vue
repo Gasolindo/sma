@@ -64,9 +64,12 @@ const loading = ref(false)
 const mensagem = ref('')
 const imagens = ref([])
 
-function selecionarArquivo(event) {
+// function selecionarArquivo(event) {
   
-  arquivo_path = event.target.value
+//   arquivo_path = event.target.value
+// }
+function selecionarArquivo(event) {
+  arquivo.value = event.target.files[0]
 }
 
 async function enviarArquivo() {
@@ -90,10 +93,19 @@ async function enviarArquivo() {
       })
     })
 
+    // const data = await response.json()
+
+    // mensagem.value = data.mensagem || 'Processamento concluído.'
+    // imagens.value = data.imagens || []
     const data = await response.json()
 
     mensagem.value = data.mensagem || 'Processamento concluído.'
-    imagens.value = data.imagens || []
+
+    if (Array.isArray(data.imagens)) {
+      imagens.value = data.imagens.map(imgBase64 =>
+        `data:image/jpeg;base64,${imgBase64}`
+      )
+    }
 
   } catch (e) {
     mensagem.value = 'Erro ao se comunicar com o backend.'
@@ -117,7 +129,18 @@ const socket = io("ws://localhost:8080", {
     });
 
     socket.on("resultados", (data) => {
-      console.log( data);
+    mensagem.value = data.mensagem || 'Processamento concluído.'
+
+    if (Array.isArray(data.imagens)) {
+      imagens.value = data.imagens.map(imgBase64 =>
+        `data:image/jpeg;base64,${imgBase64}`
+      )
+    }
+
+
+
+    // socket.on("resultados", (data) => {
+    //   console.log( data);
 
       // if (!data || !Array.isArray(data.imagens)) {
       //   console.warn("Formato inválido");
